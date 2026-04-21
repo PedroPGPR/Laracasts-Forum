@@ -9,7 +9,9 @@ class PostController extends Controller
 {
     public function index()
     {
-        return Post::all();
+        return inertia('posts/Index', [
+            'posts' => Post::all(),
+        ]);
     }
 
     public function store(Request $request)
