@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-vue-next';
+import { LayoutGrid, Menu, UserRoundPlus, LogIn } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { index } from '@/actions/App/Http/Controllers/PostController';
 import AppLogo from '@/components/AppLogo.vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
@@ -35,7 +36,6 @@ import UserMenuContent from '@/components/UserMenuContent.vue';
 import { useCurrentUrl } from '@/composables/useCurrentUrl';
 import { getInitials } from '@/composables/useInitials';
 import { toUrl } from '@/lib/utils';
-import { dashboard } from '@/routes';
 import type { BreadcrumbItem, NavItem } from '@/types';
 
 type Props = {
@@ -55,12 +55,6 @@ const activeItemStyles =
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
-        isActive: () => { return auth.value.user ? true : false }
-    },
-    {
         title: 'Posts',
         href: toUrl('/posts'),
         icon: LayoutGrid,
@@ -69,16 +63,19 @@ const mainNavItems: NavItem[] = [
 
 const rightNavItems: NavItem[] = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: Folder,
+        title: 'Register',
+        href: '/register',
+        icon: UserRoundPlus,
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: BookOpen,
+        title: 'Login',
+        href: '/login',
+        icon: LogIn,
     },
 ];
+const visibleNavItems = computed(() => {
+    return page.props.auth.user ? [] : rightNavItems;
+});
 </script>
 
 <template>
@@ -130,7 +127,10 @@ const rightNavItems: NavItem[] = [
                                         {{ item.title }}
                                     </Link>
                                 </nav>
-                                <div class="flex flex-col space-y-4">
+                                <div
+                                    v-if="visibleNavItems"
+                                    class="flex flex-col space-y-4"
+                                >
                                     <a
                                         v-for="item in rightNavItems"
                                         :key="item.title"
@@ -152,7 +152,7 @@ const rightNavItems: NavItem[] = [
                     </Sheet>
                 </div>
 
-                <Link :href="dashboard()" class="flex items-center gap-x-2">
+                <Link :href="index()" class="flex items-center gap-x-2">
                     <AppLogo />
                 </Link>
 
@@ -188,7 +188,7 @@ const rightNavItems: NavItem[] = [
                                 <div
                                     v-if="isCurrentUrl(item.href)"
                                     class="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white"
-                                ></div>
+                                />
                             </NavigationMenuItem>
                         </NavigationMenuList>
                     </NavigationMenu>
@@ -206,7 +206,10 @@ const rightNavItems: NavItem[] = [
                             />
                         </Button>
 
-                        <div class="hidden space-x-1 lg:flex">
+                        <div
+                            v-if="visibleNavItems"
+                            class="hidden space-x-1 lg:flex"
+                        >
                             <template
                                 v-for="item in rightNavItems"
                                 :key="item.title"
@@ -222,12 +225,11 @@ const rightNavItems: NavItem[] = [
                                             >
                                                 <a
                                                     :href="toUrl(item.href)"
-                                                    target="_blank"
                                                     rel="noopener noreferrer"
                                                 >
-                                                    <span class="sr-only">{{
-                                                        item.title
-                                                    }}</span>
+                                                    <span class="sr-only">
+                                                        {{ item.title }}
+                                                    </span>
                                                     <component
                                                         :is="item.icon"
                                                         class="size-5 opacity-80 group-hover:opacity-100"
