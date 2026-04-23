@@ -15,11 +15,6 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->when($this->id === $request->user()?->id, $this->email),
-            'comments_count' => $this->comments_count,
-            'notifications_count' => $this->notifications_count,
-            'posts_count' => $this->posts_count,
-            'read_notifications_count' => $this->read_notifications_count,
-            'unread_notifications_count' => $this->unread_notifications_count,
         ];
     }
 }

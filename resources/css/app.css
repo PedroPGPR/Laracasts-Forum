@@ -127,52 +127,60 @@
 }
 
 .dark {
-    --background: #0a0e14;
-    --foreground: #e1e7f0;
+    /* Fundos (Dracula Background: #282a36) */
+    --background: #282a36;
+    --foreground: #f8f8f2;
 
-    --card: #0d121d;
-    --card-foreground: #e1e7f0;
+    /* Cards e Popovers (Dracula Current Line: #44475a) */
+    --card: #343746;
+    --card-foreground: #f8f8f2;
 
-    --popover: #0d121d;
-    --popover-foreground: #e1e7f0;
+    --popover: #343746;
+    --popover-foreground: #f8f8f2;
 
-    --primary: #3b82f6;
-    --primary-foreground: #ffffff;
+    /* Primário e Destaque (Dracula Purple: #bd93f9) */
+    --primary: #bd93f9;
+    --primary-foreground: #282a36;
 
-    --secondary: #1e293b;
-    --secondary-foreground: #e1e7f0;
+    /* Secundário (Dracula Selection: #44475a) */
+    --secondary: #44475a;
+    --secondary-foreground: #f8f8f2;
 
-    --muted: #1a2333;
-    --muted-foreground: #94a3b8;
+    /* Muted (Dracula Comment: #6272a4) */
+    --muted: #44475a;
+    --muted-foreground: #8c97b1;
 
-    --accent: #2563eb;
-    --accent-foreground: #ffffff;
+    /* Acento (Dracula Pink: #ff79c6) */
+    --accent: #ff79c6;
+    --accent-foreground: #282a36;
 
     /* Estado e Feedback */
-    --destructive: #ef4444;
-    --destructive-foreground: #fef2f2;
+    --destructive: #ff5555; /* Dracula Red */
+    --destructive-foreground: #f8f8f2;
 
     /* Bordas e Inputs */
-    --border: #1e293b;
-    --input: #1e293b;
-    --ring: #3b82f6;
+    --border: #44475a;
+    --input: #44475a;
+    --ring: #bd93f9;
 
-    /* Gráficos (Variações de azul e complementares) */
-    --chart-1: #3b82f6;
-    --chart-2: #0ea5e9;
-    --chart-3: #2dd4bf;
-    --chart-4: #818cf8;
-    --chart-5: #60a5fa;
+    /* Gráficos (A paleta completa do Dracula) */
+    --chart-1: #bd93f9; /* Purple */
+    --chart-2: #8be9fd; /* Cyan */
+    --chart-3: #50fa7b; /* Green */
+    --chart-4: #ffb86c; /* Orange */
+    --chart-5: #ff79c6; /* Pink */
 
-    /* Sidebar (Azul meia-noite) */
-    --sidebar-background: #0f172a;
-    --sidebar-foreground: #f1f5f9;
-    --sidebar-primary: #3b82f6;
-    --sidebar-primary-foreground: #ffffff;
-    --sidebar-accent: #1e293b;
-    --sidebar-accent-foreground: #3b82f6;
-    --sidebar-border: #1e293b;
-    --sidebar-ring: #3b82f6;
+    /* Sidebar (Ligeiramente mais escura que o background principal) */
+    --sidebar-background: #1e1f29;
+    --sidebar-foreground: #f8f8f2;
+    --sidebar-primary: #bd93f9;
+    --sidebar-primary-foreground: #282a36;
+    --sidebar-accent: #44475a;
+    --sidebar-accent-foreground: #bd93f9;
+    --sidebar-border: #44475a;
+    --sidebar-ring: #bd93f9;
+
+    --color-neutral-800: #3d4268;
 }
 
 @layer base {

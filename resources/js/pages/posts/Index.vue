@@ -1,15 +1,17 @@
 <script setup lang="ts">
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { onMounted } from 'vue';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import Pagination from '@/components/ui/Pagination.vue';
 
 type Post = {
-    id: number
-    title: string
-    body: string
-}
+    id: number;
+    title: string;
+    body: string;
+};
 
 defineProps<{
-    posts: Post[]
-}>()
+    posts: Post[];
+}>();
 </script>
 
 <template>
@@ -17,21 +19,23 @@ defineProps<{
         <div class="space-y-1 text-center">
             <h1 class="text-3xl font-bold tracking-tight">Posts</h1>
             <p class="text-muted-foreground">
-                Lista de posts disponíveis ({{ posts.length }})
+                Lista de posts disponíveis ({{ posts.data.length }})
             </p>
         </div>
 
         <div
-            v-if="posts.length"
+            v-if="posts.data.length"
             class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
         >
             <Card
-                v-for="post in posts"
+                v-for="post in posts.data"
                 :key="post.id"
-                class="h-full border-border/80 transition-shadow hover:shadow-md "
+                class="h-full border-border/80 transition-shadow hover:shadow-md"
             >
                 <CardHeader>
-                    <CardTitle class="text-lg leading-6">{{ post.title }}</CardTitle>
+                    <CardTitle class="text-lg leading-6">
+                        {{ post.title }}
+                    </CardTitle>
                 </CardHeader>
                 <CardContent>
                     <p class="max-h-32 overflow-y-auto text-sm text-muted-foreground">
@@ -46,6 +50,8 @@ defineProps<{
                 Ainda nao existem posts para mostrar.
             </CardContent>
         </Card>
+
+        <Pagination :meta="" />
     </section>
 </template>
 
