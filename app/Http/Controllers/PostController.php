@@ -11,6 +11,8 @@ class PostController extends Controller
 {
     public function index()
     {
+        ray()->showQueries();
+
         return Inertia::render('posts/Index', [
             'posts' => PostResource::collection(Post::paginate(15)),
         ]);

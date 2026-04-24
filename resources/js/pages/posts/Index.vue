@@ -1,21 +1,15 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Pagination from '@/components/ui/Pagination.vue';
-
-type Post = {
-    id: number;
-    title: string;
-    body: string;
-};
+import type { PostIndexResponse } from '@/types/post';
 
 defineProps<{
-    posts: Post[];
+    posts: PostIndexResponse;
 }>();
 </script>
 
 <template>
-    <section class="mx-auto max-w-6xl space-y-6 px-4 py-6">
+    <section class="mx-auto max-w-6xl space-y-6 px-4 py-6 mb-3">
         <div class="space-y-1 text-center">
             <h1 class="text-3xl font-bold tracking-tight">Posts</h1>
             <p class="text-muted-foreground">
@@ -38,7 +32,9 @@ defineProps<{
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <p class="max-h-32 overflow-y-auto text-sm text-muted-foreground">
+                    <p
+                        class="max-h-32 overflow-hidden text-sm text-muted-foreground"
+                    >
                         {{ post.body }}
                     </p>
                 </CardContent>
@@ -51,7 +47,7 @@ defineProps<{
             </CardContent>
         </Card>
 
-        <Pagination :meta="" />
+        <Pagination :meta="posts.meta" />
     </section>
 </template>
 

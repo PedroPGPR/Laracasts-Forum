@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -27,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
         $this->configureDefaults();
 
         JsonResource::withoutWrapping();
+        Model::preventLazyLoading();
     }
 
     /**
