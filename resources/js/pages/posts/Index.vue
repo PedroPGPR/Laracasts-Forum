@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { router } from '@inertiajs/vue3';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Pagination from '@/components/ui/Pagination.vue';
 import type { PostIndexResponse } from '@/types/post';
@@ -6,10 +7,14 @@ import type { PostIndexResponse } from '@/types/post';
 defineProps<{
     posts: PostIndexResponse;
 }>();
+
+const showPost = (id: number) => {
+    router.visit(`/posts/${id}`);
+};
 </script>
 
 <template>
-    <section class="mx-auto max-w-6xl space-y-6 px-4 py-6 mb-3">
+    <section class="mx-auto mb-3 max-w-6xl space-y-6 px-4 py-6">
         <div class="space-y-1 text-center">
             <h1 class="text-3xl font-bold tracking-tight">Posts</h1>
             <p class="text-muted-foreground">
@@ -24,7 +29,8 @@ defineProps<{
             <Card
                 v-for="post in posts.data"
                 :key="post.id"
-                class="h-full border-border/80 transition-shadow hover:shadow-md"
+                class="hover:border-[#3D4368CC] h-full border-border/80 transition-shadow hover:cursor-pointer hover:bg-[#3D4368] hover:shadow-md"
+                @click="showPost(post.id)"
             >
                 <CardHeader>
                     <CardTitle class="text-lg leading-6">

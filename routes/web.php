@@ -16,6 +16,7 @@ Route::inertia('/', 'Welcome', [
 
 Route::prefix('posts')->group(function () {
     Route::get('/', [PostController::class, 'index'])->name('posts.index');
+    Route::get('/{post}', [PostController::class, 'show'])->name('posts.show');
 });
 
 Route::get('test', function () {
