@@ -29,7 +29,7 @@ const showPost = (id: number) => {
             <Card
                 v-for="post in posts.data"
                 :key="post.id"
-                class="hover:border-[#3D4368CC] h-full border-border/80 transition-shadow hover:cursor-pointer hover:bg-[#3D4368] hover:shadow-md"
+                class="h-full border-border/80 transition-shadow hover:cursor-pointer hover:border-[#3D4368CC] hover:bg-[#3D4368] hover:shadow-md"
                 @click="showPost(post.id)"
             >
                 <CardHeader>
@@ -53,7 +53,7 @@ const showPost = (id: number) => {
             </CardContent>
         </Card>
 
-        <Pagination :meta="posts.meta" />
+        <Pagination :meta="posts.meta" :only="['posts']" />
     </section>
 </template>
 

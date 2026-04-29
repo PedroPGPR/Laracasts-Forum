@@ -6,6 +6,11 @@ const props = defineProps({
     meta: {
         type: Object,
         required: true
+    },
+    only: {
+        type: Array,
+        required: false,
+        default: []
     }
 });
 
@@ -23,6 +28,7 @@ const nextURL = computed(() => {
             <template v-if="previousURL">
                 <Link
                     :href="previousURL"
+                    :only="only"
                     class="relative inline-flex items-center rounded-md border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-gray-200 hover:bg-white/10"
                 >
                     Previous
@@ -31,6 +37,7 @@ const nextURL = computed(() => {
             <template v-if="nextURL">
                 <Link
                     :href="nextURL"
+                    :only="only"
                     class="relative ml-3 inline-flex items-center rounded-md border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-gray-200 hover:bg-white/10"
                 >
                     Next
@@ -62,6 +69,7 @@ const nextURL = computed(() => {
                         <template v-if="link.url">
                             <Link
                                 :href="link.url"
+                                :only="only"
                                 class="relative inline-flex items-center first-of-type:rounded-l-md last-of-type:rounded-r-md px-3 py-2"
                                 :class="{
                                     'z-10 text-white focus-visible:outline-2 focus-visible:outline-offset-2 bg-indigo-500 focus-visible:outline-indigo-500': link.active,

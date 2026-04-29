@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\PostResource;
@@ -17,6 +18,11 @@ Route::inertia('/', 'Welcome', [
 Route::prefix('posts')->group(function () {
     Route::get('/', [PostController::class, 'index'])->name('posts.index');
     Route::get('/{post}', [PostController::class, 'show'])->name('posts.show');
+
+    // Comments
+    Route::post('/{post}/comments', [CommentController::class, 'store'])
+        ->middleware('auth')
+        ->name('posts.comments.store');
 });
 
 Route::get('test', function () {
