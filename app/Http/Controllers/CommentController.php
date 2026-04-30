@@ -34,5 +34,21 @@ class CommentController extends Controller
 
     public function update(Request $request, Comment $comment) {}
 
-    public function destroy(Comment $comment) {}
+    public function destroy(Post $post, Comment $comment)
+    {
+        if (! Auth::check()) {
+            return to_route('login');
+        }
+
+        if (
+            Auth::id() !== $comment->user_id
+            || $comment->post_id !== $post->id
+        ) {
+            return back()->with('error', 'You cannot delete this comment.');
+        }
+
+        $comment->delete();
+
+        return to_route('posts.show', $post)->with('success', 'Comment deleted.');
+    }
 }

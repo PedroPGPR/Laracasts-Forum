@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
 import moment from 'moment';
-import { ref } from 'vue';
-import { store } from '@/actions/App/Http/Controllers/CommentController';
 import Comment from '@/components/Comment.vue';
+import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Pagination from '@/components/ui/Pagination.vue';
 import { Textarea } from '@/components/ui/textarea';
+import { store } from '@/routes/posts/comments';
 
 const props = defineProps({
     post: {
@@ -15,15 +15,20 @@ const props = defineProps({
         required: true,
     },
     comments: {
-        type: Array,
+        type: Object,
         required: true,
     },
 });
 
-const body = ref('');
+const form = useForm({
+    body: '',
+});
 const addComment = () => {
-    store({ post: props.post.id });
-}
+    form.submit(store(props.post.id), {
+        preserveScroll: true,
+        onSuccess: () => form.reset('body'),
+    });
+};
 </script>
 
 <template>
@@ -46,17 +51,25 @@ const addComment = () => {
         <Card class="mx-10 p-5">
             <h2 class="font-bold">Comments</h2>
             <form v-if="$page.props.auth.user" @submit.prevent="addComment">
-                <Textarea
-                    v-model="body"
-                    :rows="3"
-                    placeholder="Add a comment..."
-                    class="mb-4"
-                />
+                <div class="mb-4">
+                    <Textarea
+                        v-model="form.body"
+                        :rows="3"
+                        placeholder="Add a comment..."
+                    />
+                    <InputError :message="form.errors.body" class="mt-1 text-sm" />
+                </div>
 
-                <Button class="float-end hover:cursor-pointer" type="submit">Add Comment</Button>
+                <Button
+                    class="float-end hover:cursor-pointer"
+                    type="submit"
+                    :disabled="form.processing"
+                >
+                    {{ form.processing ? 'Adding Comment' : 'Add Comment' }}
+                </Button>
             </form>
             <template v-for="comment in props.comments.data" :key="comment.id">
-                <Comment :comment="comment" />
+                <Comment :comment="comment" :post-id="props.post.id" />
             </template>
 
             <Pagination :meta="comments.meta" :only="['comments']" />

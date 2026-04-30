@@ -23,14 +23,10 @@ Route::prefix('posts')->group(function () {
     Route::post('/{post}/comments', [CommentController::class, 'store'])
         ->middleware('auth')
         ->name('posts.comments.store');
-});
 
-Route::get('test', function () {
-    return [
-        UserResource::make(User::find(11)),
-        PostResource::make(Post::find(1)),
-        CommentResource::make(Comment::find(1)),
-    ];
+    Route::delete('/{post}/comments/{comment}', [CommentController::class, 'destroy'])
+        ->middleware('auth')
+        ->name('posts.comments.destroy');
 });
 
 require __DIR__.'/settings.php';
