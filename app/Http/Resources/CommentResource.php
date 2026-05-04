@@ -19,6 +19,10 @@ class CommentResource extends JsonResource
 
             'post' => new PostResource($this->whenLoaded('post')),
             'user' => new UserResource($this->whenLoaded('user')),
+
+            'can' => [
+                'delete' => $request->user()?->can('delete', $this->resource),
+            ],
         ];
     }
 }

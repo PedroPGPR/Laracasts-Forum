@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { router, usePage } from '@inertiajs/vue3';
 import moment from 'moment';
-import { computed } from 'vue';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
@@ -16,20 +14,7 @@ const props = defineProps({
     },
 });
 
-const deleteComment = (id: number) => {
-    router.delete(
-        route('posts.comments.destroy', { post: props.postId, comment: id }),
-        {
-            preserveScroll: true
-        }
-    );
-};
-
-const canDelete = computed(() => {
-    const authUser = usePage().props.auth.user;
-
-    return authUser && (authUser.id === props.comment.user.id);
-});
+const emit = defineEmits(['delete']);
 </script>
 
 <template>
@@ -46,9 +31,9 @@ const canDelete = computed(() => {
                 {{ props.comment.body }}
             </p>
             <Button
-                v-if="canDelete"
+                v-if="props.comment.can?.delete"
                 class="bg-red-400 text-white hover:cursor-pointer hover:bg-red-500 float-end mt-2"
-                @click="deleteComment(props.comment.id)"
+                @click="emit('delete', props.comment.id)"
             >
                 Delete
             </Button>

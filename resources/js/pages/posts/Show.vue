@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useForm } from '@inertiajs/vue3';
+import { router, useForm } from '@inertiajs/vue3';
 import moment from 'moment';
 import Comment from '@/components/Comment.vue';
 import InputError from '@/components/InputError.vue';
@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Pagination from '@/components/ui/Pagination.vue';
 import { Textarea } from '@/components/ui/textarea';
-import { store } from '@/routes/posts/comments';
 
 const props = defineProps({
     post: {
@@ -24,10 +23,21 @@ const form = useForm({
     body: '',
 });
 const addComment = () => {
-    form.submit(store(props.post.id), {
-        preserveScroll: true,
-        onSuccess: () => form.reset('body'),
-    });
+    form.post(
+        route('posts.comments.store', props.post.id), {
+            preserveScroll: true,
+            onSuccess: () => form.reset('body'),
+        }
+    );
+};
+
+const deleteComment = (id: number) => {
+    router.delete(
+        route('posts.comments.destroy', { post: props.post.id, comment: id, page: props.comments.meta.current_page }),
+        {
+            preserveScroll: true,
+        },
+    );
 };
 </script>
 
@@ -57,7 +67,10 @@ const addComment = () => {
                         :rows="3"
                         placeholder="Add a comment..."
                     />
-                    <InputError :message="form.errors.body" class="mt-1 text-sm" />
+                    <InputError
+                        :message="form.errors.body"
+                        class="mt-1 text-sm"
+                    />
                 </div>
 
                 <Button
@@ -69,7 +82,11 @@ const addComment = () => {
                 </Button>
             </form>
             <template v-for="comment in props.comments.data" :key="comment.id">
-                <Comment :comment="comment" :post-id="props.post.id" />
+                <Comment
+                    :comment="comment"
+                    :post-id="props.post.id"
+                    @delete="deleteComment"
+                />
             </template>
 
             <Pagination :meta="comments.meta" :only="['comments']" />

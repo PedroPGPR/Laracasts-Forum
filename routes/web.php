@@ -15,11 +15,14 @@ Route::inertia('/', 'Welcome', [
     'canRegister' => Features::enabled(Features::registration()),
 ])->name('home');
 
+// Posts
 Route::prefix('posts')->group(function () {
-    Route::get('/', [PostController::class, 'index'])->name('posts.index');
-    Route::get('/{post}', [PostController::class, 'show'])->name('posts.show');
+    Route::get('/', [PostController::class, 'index'])
+        ->name('posts.index');
+    Route::get('/{post}', [PostController::class, 'show'])
+        ->name('posts.show');
 
-    // Comments
+    // Post -> Comments
     Route::post('/{post}/comments', [CommentController::class, 'store'])
         ->middleware('auth')
         ->name('posts.comments.store');
