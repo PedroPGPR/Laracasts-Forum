@@ -10,10 +10,6 @@ use Illuminate\Support\Facades\Gate;
 
 class CommentController extends Controller
 {
-    public function index() {}
-
-    public function create() {}
-
     public function store(Post $post, Request $request)
     {
         $validatedData = $request->validate([
@@ -29,11 +25,21 @@ class CommentController extends Controller
         return to_route('posts.show', $post);
     }
 
-    public function show(Comment $comment) {}
+    public function update(Post $post, Comment $comment, Request $request)
+    {
+        $validatedData = $request->validate([
+            'body' => 'required|string|max:2500',
+            'page' => 'nullable|integer',
+        ]);
 
-    public function edit(Comment $comment) {}
+        Gate::authorize('update', $comment);
 
-    public function update(Request $request, Comment $comment) {}
+        $comment->update([
+            'body' => $validatedData['body'],
+        ]);
+
+        return to_route('posts.show', ['post' => $post, 'page' => $validatedData['page'] ?? null])->with('success', 'Comment updated.');
+    }
 
     public function destroy(Post $post, Comment $comment, Request $request)
     {

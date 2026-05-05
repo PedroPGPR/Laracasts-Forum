@@ -14,7 +14,7 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(['delete']);
+const emit = defineEmits(['delete', 'update']);
 </script>
 
 <template>
@@ -30,13 +30,23 @@ const emit = defineEmits(['delete']);
             <p class="mt-1 text-justify">
                 {{ props.comment.body }}
             </p>
-            <Button
-                v-if="props.comment.can?.delete"
-                class="bg-red-400 text-white hover:cursor-pointer hover:bg-red-500 float-end mt-2"
-                @click="emit('delete', props.comment.id)"
-            >
-                Delete
-            </Button>
+            <div class="flex justify-end gap-2 mt-2">
+                <Button
+                    v-if="props.comment.can?.update"
+                    class="hover:cursor-pointer"
+                    variant="secondary"
+                    @click="emit('update', props.comment.id)"
+                >
+                    Edit
+                </Button>
+                <Button
+                    v-if="props.comment.can?.delete"
+                    class="bg-red-400 text-white hover:cursor-pointer hover:bg-red-500"
+                    @click="emit('delete', props.comment.id)"
+                >
+                    Delete
+                </Button>
+            </div>
         </div>
     </Card>
 </template>
