@@ -22,7 +22,11 @@ class CommentController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        return to_route('posts.show', $post);
+        $post = $post->fresh(['user']);
+        $comments = $post->comments()->with('user')->latest()->latest('id')->paginate(5);
+
+        return to_route('posts.show', ['post' => $post])
+            ->with('success', 'Comment created successfully.');
     }
 
     public function update(Post $post, Comment $comment, Request $request)
@@ -38,7 +42,8 @@ class CommentController extends Controller
             'body' => $validatedData['body'],
         ]);
 
-        return to_route('posts.show', ['post' => $post, 'page' => $validatedData['page'] ?? null])->with('success', 'Comment updated.');
+        return to_route('posts.show', ['post' => $post, 'page' => $validatedData['page'] ?? null])
+            ->with('success', 'Comment updated.');
     }
 
     public function destroy(Post $post, Comment $comment, Request $request)
@@ -47,6 +52,7 @@ class CommentController extends Controller
 
         $comment->delete();
 
-        return to_route('posts.show', ['post' => $post, 'page' => $request->page])->with('success', 'Comment deleted.');
+        return to_route('posts.show', ['post' => $post, 'page' => $request->page])
+            ->with('success', 'Comment deleted.');
     }
 }

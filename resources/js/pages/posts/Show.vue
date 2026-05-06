@@ -98,10 +98,7 @@ const deleteComment = (id: number) => {
             <h2 class="font-bold">Comments</h2>
             <form
                 v-if="$page.props.auth.user"
-                @submit.prevent="
-                    () =>
-                        commentIDBeingEdited ? updateComment() : addComment()
-                "
+                @submit.prevent="() => commentIDBeingEdited ? updateComment() : addComment()"
             >
                 <div class="mb-4">
                     <Textarea

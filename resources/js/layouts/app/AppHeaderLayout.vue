@@ -4,6 +4,9 @@ import AppHeader from '@/components/AppHeader.vue';
 import AppShell from '@/components/AppShell.vue';
 import { Toaster } from '@/components/ui/sonner';
 import type { BreadcrumbItem } from '@/types';
+import { usePage } from '@inertiajs/vue3';
+import { toast } from 'vue-sonner';
+import { watch } from 'vue';
 
 type Props = {
     breadcrumbs?: BreadcrumbItem[];
@@ -12,6 +15,15 @@ type Props = {
 withDefaults(defineProps<Props>(), {
     breadcrumbs: () => [],
 });
+
+const page = usePage();
+
+watch(
+    () => page.props.flash?.success,
+    (message) => {
+        if (message) toast.success(message);
+    },
+);
 </script>
 
 <template>
@@ -20,6 +32,6 @@ withDefaults(defineProps<Props>(), {
         <AppContent variant="header">
             <slot />
         </AppContent>
-        <Toaster />
+        <Toaster richColors />
     </AppShell>
 </template>
