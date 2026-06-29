@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Resources\CommentResource;
@@ -39,7 +41,7 @@ class PostController extends Controller
         ]);
     }
 
-    public function update(Request $request, Post $post)
+    public function update(Request $request, Post $post): Post
     {
         $data = $request->validate([
             'title' => ['required'],

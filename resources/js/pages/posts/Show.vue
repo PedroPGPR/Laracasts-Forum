@@ -8,6 +8,9 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Pagination from '@/components/ui/Pagination.vue';
 import { Textarea } from '@/components/ui/textarea';
+import { useNotification } from '@/composables/useNotification';
+
+const { confirmNotification } = useNotification();
 
 const props = defineProps({
     post: {
@@ -64,16 +67,24 @@ const updateComment = () => {
 };
 
 const deleteComment = (id: number) => {
-    router.delete(
-        route('posts.comments.destroy', {
-            post: props.post.id,
-            comment: id,
-            page: props.comments.meta.current_page,
-        }),
-        {
-            preserveScroll: true,
+    confirmNotification({
+        type: 'warning',
+        title: 'Warning',
+        message: 'You are about to delete this comment. You sure you want to delete it?',
+        confirmAction: async () => {
+            router.delete(
+                route('posts.comments.destroy', {
+                    post: props.post.id,
+                    comment: id,
+                    page: props.comments.meta.current_page,
+                }),
+                {
+                    preserveScroll: true,
+                },
+            );
         },
-    );
+        cancelAction: false
+    });
 };
 </script>
 
@@ -98,7 +109,10 @@ const deleteComment = (id: number) => {
             <h2 class="font-bold">Comments</h2>
             <form
                 v-if="$page.props.auth.user"
-                @submit.prevent="() => commentIDBeingEdited ? updateComment() : addComment()"
+                @submit.prevent="
+                    () =>
+                        commentIDBeingEdited ? updateComment() : addComment()
+                "
             >
                 <div class="mb-4">
                     <Textarea

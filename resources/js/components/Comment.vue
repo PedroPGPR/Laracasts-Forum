@@ -2,6 +2,7 @@
 import moment from 'moment';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import NotificationDialog from '@/components/NotificationDialog.vue';
 
 const props = defineProps({
     comment: {
@@ -30,7 +31,7 @@ const emit = defineEmits(['delete', 'update']);
             <p class="mt-1 text-justify">
                 {{ props.comment.body }}
             </p>
-            <div class="flex justify-end gap-2 mt-2">
+            <div class="mt-2 flex justify-end gap-2">
                 <Button
                     v-if="props.comment.can?.update"
                     class="hover:cursor-pointer"

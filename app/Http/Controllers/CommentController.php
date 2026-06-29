@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
@@ -23,7 +25,7 @@ class CommentController extends Controller
         ]);
 
         $post = $post->fresh(['user']);
-        $comments = $post->comments()->with('user')->latest()->latest('id')->paginate(5);
+        $post->comments()->with('user')->latest()->latest('id')->paginate(5);
 
         return to_route('posts.show', ['post' => $post])
             ->with('success', 'Comment created successfully.');
