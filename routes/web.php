@@ -13,8 +13,14 @@ Route::inertia('/', 'Welcome', [
 Route::prefix('posts')->group(function () {
     Route::get('/', [PostController::class, 'index'])
         ->name('posts.index');
+    Route::get('/create', [PostController::class, 'create'])
+        ->middleware('auth')
+        ->name('posts.create');
     Route::get('/{post}', [PostController::class, 'show'])
         ->name('posts.show');
+    Route::post('/', [PostController::class, 'store'])
+        ->middleware('auth')
+        ->name('posts.store');
 
     // Post -> Comments
     Route::post('/{post}/comments', [CommentController::class, 'store'])

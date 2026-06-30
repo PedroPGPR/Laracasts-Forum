@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { LayoutGrid, Menu, UserRoundPlus, LogIn } from 'lucide-vue-next';
+import {
+    LayoutGrid,
+    Menu,
+    UserRoundPlus,
+    LogIn,
+    CirclePlus,
+} from 'lucide-vue-next';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
@@ -52,13 +58,25 @@ const { isCurrentUrl, whenCurrentUrl } = useCurrentUrl();
 const activeItemStyles =
     'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100';
 
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Posts',
-        href: toUrl('/posts'),
-        icon: LayoutGrid,
-    },
-];
+const mainNavItems = computed<NavItem[]>(() => {
+    const items: NavItem[] = [
+        {
+            title: 'Posts',
+            href: route('posts.index'),
+            icon: LayoutGrid,
+        },
+    ];
+
+    if (page.props.permissions.create_posts) {
+        items.push({
+            title: 'Create Post',
+            href: route('posts.create'),
+            icon: CirclePlus,
+        });
+    }
+
+    return items;
+});
 
 const rightNavItems: NavItem[] = [
     {
@@ -195,7 +213,6 @@ const visibleNavItems = computed(() => {
 
                 <div class="ml-auto flex items-center space-x-2">
                     <div class="relative flex items-center space-x-1">
-
                         <div
                             v-if="visibleNavItems"
                             class="hidden space-x-1 lg:flex"
