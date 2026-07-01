@@ -7,10 +7,6 @@ import type { PostIndexResponse } from '@/types/post';
 defineProps<{
     posts: PostIndexResponse;
 }>();
-
-const showPost = (id: number) => {
-    router.visit(`/posts/${id}`);
-};
 </script>
 
 <template>
@@ -30,7 +26,7 @@ const showPost = (id: number) => {
                 v-for="post in posts.data"
                 :key="post.id"
                 class="h-full border-border/80 transition-shadow hover:cursor-pointer hover:border-[#3D4368CC] hover:bg-[#3D4368] hover:shadow-md"
-                @click="showPost(post.id)"
+                @click="router.visit(post.routes.show)"
             >
                 <CardHeader>
                     <CardTitle class="text-lg leading-6">

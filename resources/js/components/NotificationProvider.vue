@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useNotification } from '@/composables/useNotification';
 import NotificationDialog from '@/components/NotificationDialog.vue';
+import { useNotification } from '@/composables/useNotification';
 
 const { isOpen, notification, closeNotification, handleConfirm, handleCancel } = useNotification();
 </script>

@@ -2,7 +2,6 @@
 import moment from 'moment';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import NotificationDialog from '@/components/NotificationDialog.vue';
 
 const props = defineProps({
     comment: {

@@ -57,7 +57,8 @@
         ],
         "lint": [
             "vendor/bin/rector",
-            "pint --parallel"
+            "pint --parallel",
+            "npm run lint"
         ],
         "lint:check": [
             "pint --parallel --test"

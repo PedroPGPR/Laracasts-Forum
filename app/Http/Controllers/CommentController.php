@@ -27,7 +27,7 @@ class CommentController extends Controller
         $post = $post->fresh(['user']);
         $post->comments()->with('user')->latest()->latest('id')->paginate(5);
 
-        return to_route('posts.show', ['post' => $post])
+        return redirect($post->showRoute())
             ->with('success', 'Comment created successfully.');
     }
 
@@ -44,7 +44,7 @@ class CommentController extends Controller
             'body' => $validatedData['body'],
         ]);
 
-        return to_route('posts.show', ['post' => $post, 'page' => $validatedData['page'] ?? null])
+        return redirect($post->showRoute(['page' => $validatedData['page'] ?? null]))
             ->with('success', 'Comment updated.');
     }
 
@@ -54,7 +54,7 @@ class CommentController extends Controller
 
         $comment->delete();
 
-        return to_route('posts.show', ['post' => $post, 'page' => $request->page])
+        return redirect($post->showRoute(['page' => $request->page]))
             ->with('success', 'Comment deleted.');
     }
 }

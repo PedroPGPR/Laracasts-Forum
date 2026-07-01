@@ -9,6 +9,7 @@ use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class PostController extends Controller
@@ -40,17 +41,19 @@ class PostController extends Controller
 
         $newPost = $request->user()->posts()->create($data);
         $newPost->load('user');
-        $comments = $newPost->comments()->with('user')->latest()->latest('id')->paginate(5);
 
-        return Inertia::render('posts/Show', [
-            'post' => PostResource::make($newPost),
-            'comments' => CommentResource::collection($comments),
-        ]);
+        return redirect($newPost->showRoute())
+            ->with('success', 'Post created successfully.');
     }
 
-    public function show(Post $post)
+    public function show(Request $request, Post $post)
     {
         $this->authorize('view', $post);
+
+        if (! Str::contains($post->showRoute(), $request->path())) {
+            return redirect($post->showRoute($request->query()), 301);
+        }
+
         $post->load(['user']);
         $comments = $post->comments()->with('user')->latest()->latest('id')->paginate(5);
 

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
 import InputError from '@/components/InputError.vue';
+import MarkdownEditor from '@/components/MarkdownEditor.vue';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -42,6 +43,7 @@ const createPost = () => {
 
                 <div class="mb-4 flex flex-col">
                     <label for="body" class="px-1">Body</label>
+                    <MarkdownEditor v-model="form.body" />
                     <Textarea
                         id="body"
                         v-model="form.body"
