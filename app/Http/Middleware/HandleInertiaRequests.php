@@ -8,6 +8,7 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Override;
+use Tighten\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -53,6 +54,10 @@ class HandleInertiaRequests extends Middleware
             ],
             'permissions' => [
                 'create_posts' => $request->user()?->can('create', Post::class),
+            ],
+            'ziggy' => fn (): array => [
+                ...(new Ziggy)->toArray(),
+                'location' => $request->url(),
             ],
         ];
     }

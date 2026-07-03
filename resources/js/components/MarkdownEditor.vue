@@ -3,6 +3,7 @@ import { Link } from '@tiptap/extension-link';
 import { StarterKit } from '@tiptap/starter-kit';
 import { EditorContent, useEditor } from '@tiptap/vue-3';
 import { Markdown } from 'tiptap-markdown';
+import { Placeholder } from '@tiptap/extension-placeholder';
 import { watch } from 'vue';
 import 'remixicon/fonts/remixicon.css';
 
@@ -10,6 +11,14 @@ const props = defineProps({
     modelValue: {
         type: String,
         default: '',
+    },
+    editorClass: {
+        type: String,
+        default: '',
+    },
+    placeholder: {
+        type: String,
+        default: 'Write something...',
     },
 });
 
@@ -38,10 +47,13 @@ const editor = useEditor({
         }),
         Link,
         Markdown,
+        Placeholder.configure({
+            placeholder: props.placeholder,
+        }),
     ],
     editorProps: {
         attributes: {
-            class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl dark:prose-invert w-full max-w-full !max-w-none min-h-48 rounded-b-xl border border-input bg-transparent px-3 py-2 text-base text-foreground shadow-xs transition-[color,box-shadow] outline-none file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-em:text-foreground prose-blockquote:text-foreground prose-li:text-foreground prose-a:text-primary md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive',
+            class: `prose prose-sm sm:prose lg:prose-lg xl:prose-2xl dark:prose-invert w-full max-w-full !max-w-none min-h-48 rounded-b-xl border border-input bg-transparent px-3 py-2 text-sm prose-p:text-sm prose-li:text-sm text-foreground shadow-xs transition-[color,box-shadow] outline-none file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-em:text-foreground prose-blockquote:text-foreground prose-li:text-foreground prose-a:text-primary focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive ${props.editorClass}`,
         },
     },
     onUpdate: () => emit('update:modelValue', getMarkdownValue()),
@@ -85,6 +97,10 @@ const promptUserForHref = () => {
 
     editor.value?.chain().focus().setLink({ href }).run();
 };
+
+defineExpose({
+    focus: () => editor.value?.commands.focus(),
+});
 </script>
 
 <template>
@@ -266,9 +282,27 @@ const promptUserForHref = () => {
                     <i class="ri-h-3 text-base leading-none"></i>
                 </button>
             </li>
+
+            <slot
+                name="toolbar"
+                :editor="editor"
+                :toolbar-button-base="toolbarButtonBase"
+                :is-heading-active="isHeadingActive"
+                :toolbar-button-active="toolbarButtonActive"
+                :toolbar-button-inactive="toolbarButtonInactive"
+            />
         </menu>
+
         <EditorContent :editor="editor" class="w-full" />
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+:deep(.tiptap p.is-editor-empty:first-child::before) {
+    color: hsl(var(--muted-foreground) / 80) !important;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+}
+</style>

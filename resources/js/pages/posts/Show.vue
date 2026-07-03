@@ -9,6 +9,7 @@ import { Card } from '@/components/ui/card';
 import Pagination from '@/components/ui/Pagination.vue';
 import { Textarea } from '@/components/ui/textarea';
 import { useNotification } from '@/composables/useNotification';
+import MarkdownEditor from '@/components/MarkdownEditor.vue';
 
 const { confirmNotification } = useNotification();
 
@@ -28,6 +29,7 @@ const form = useForm({
 });
 
 const commentIDBeingEdited = ref(0);
+const commentEditorRef = ref();
 const commentBeingEdited = computed(() => {
     return props.comments.data.find(
         (comment: { id: number }) => comment.id === commentIDBeingEdited.value,
@@ -36,6 +38,7 @@ const commentBeingEdited = computed(() => {
 const editComment = (commentID: number) => {
     commentIDBeingEdited.value = commentID;
     form.body = commentBeingEdited.value?.body;
+    commentEditorRef.value?.focus();
 };
 const cancelUpdate = () => {
     commentIDBeingEdited.value = 0;
@@ -70,7 +73,8 @@ const deleteComment = (id: number) => {
     confirmNotification({
         type: 'warning',
         title: 'Warning',
-        message: 'You are about to delete this comment. You sure you want to delete it?',
+        message:
+            'You are about to delete this comment. You sure you want to delete it?',
         confirmAction: async () => {
             router.delete(
                 route('posts.comments.destroy', {
@@ -83,7 +87,7 @@ const deleteComment = (id: number) => {
                 },
             );
         },
-        cancelAction: false
+        cancelAction: false,
     });
 };
 </script>
@@ -99,9 +103,10 @@ const deleteComment = (id: number) => {
                         {{ moment(props.post.created_at).fromNow() }}
                     </div>
                 </div>
-                <p class="mt-2 text-justify">
-                    {{ props.post.body }}
-                </p>
+                <article
+                    v-html="props.post.html"
+                    class="prose prose-sm mt-2 max-w-none dark:prose-invert"
+                ></article>
             </div>
         </Card>
 
@@ -115,10 +120,12 @@ const deleteComment = (id: number) => {
                 "
             >
                 <div class="mb-4">
-                    <Textarea
+                    <MarkdownEditor
                         v-model="form.body"
+                        ref="commentEditorRef"
                         :rows="3"
                         placeholder="Add a comment..."
+                        editorClass="min-h-[150px]"
                     />
                     <InputError
                         :message="form.errors.body"

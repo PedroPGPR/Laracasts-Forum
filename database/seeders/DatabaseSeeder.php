@@ -22,12 +22,12 @@ class DatabaseSeeder extends Seeder
             ->recycle($users)
             ->create();
 
-        $comments = Comment::factory(100)
+        Comment::factory(100)
             ->recycle($users)
             ->recycle($posts)
             ->create();
 
-        $pedro = User::factory()
+        User::factory()
             ->has(Post::factory(10)->withFixture())
             ->has(Comment::factory(90)->recycle($posts))
             ->create([

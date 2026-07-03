@@ -27,9 +27,7 @@ const emit = defineEmits(['delete', 'update']);
                 </div>
                 <!-- v-if="comment.user.name === $page.props.auth.user.id"-->
             </div>
-            <p class="mt-1 text-justify">
-                {{ props.comment.body }}
-            </p>
+            <div class="mt-1 prose prose-sm max-w-none dark:prose-invert" v-html="props.comment.html" />
             <div class="mt-2 flex justify-end gap-2">
                 <Button
                     v-if="props.comment.can?.update"

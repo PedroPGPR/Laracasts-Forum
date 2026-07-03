@@ -19,11 +19,15 @@ const createPost = () => {
         },
     });
 };
+
+const autofill = () => {
+    console.log('To implete getting a post from a .md');
+};
 </script>
 
 <template>
     <div class="my-10 flex flex-col gap-10">
-        <h1 class="font-bold text-center text-2xl">Create a Post</h1>
+        <h1 class="text-center text-2xl font-bold">Create a Post</h1>
 
         <Card class="mx-10 p-5">
             <form @submit.prevent="createPost">
@@ -43,14 +47,37 @@ const createPost = () => {
 
                 <div class="mb-4 flex flex-col">
                     <label for="body" class="px-1">Body</label>
-                    <MarkdownEditor v-model="form.body" />
-                    <Textarea
-                        id="body"
-                        v-model="form.body"
-                        class="mt-1"
-                        :rows="10"
-
-                    ></Textarea>
+                    <MarkdownEditor v-model="form.body">
+                        <template
+                            #toolbar="{
+                                editor,
+                                toolbarButtonBase,
+                                toolbarButtonActive,
+                                toolbarButtonInactive,
+                                isHeadingActive,
+                            }"
+                        >
+                            <li>
+                                <button
+                                    type="button"
+                                    class="hover:cursor-pointer"
+                                    :class="[
+                                        toolbarButtonBase,
+                                        isHeadingActive(4)
+                                            ? toolbarButtonActive
+                                            : toolbarButtonInactive,
+                                    ]"
+                                    aria-label="Cabeçalho nível 4"
+                                    :aria-pressed="isHeadingActive(4)"
+                                    @click="autofill"
+                                >
+                                    <i
+                                        class="ri-article-line text-base leading-none"
+                                    ></i>
+                                </button>
+                            </li>
+                        </template>
+                    </MarkdownEditor>
                     <InputError
                         :message="form.errors.body"
                         class="mt-1 text-sm"
