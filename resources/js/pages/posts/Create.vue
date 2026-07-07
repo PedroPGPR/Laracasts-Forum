@@ -5,7 +5,7 @@ import MarkdownEditor from '@/components/MarkdownEditor.vue';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import { isInProduction } from '@/lib/utils';
 
 const form = useForm({
     title: '',
@@ -20,8 +20,16 @@ const createPost = () => {
     });
 };
 
-const autofill = () => {
-    console.log('To implete getting a post from a .md');
+const autofill = async () => {
+    if (isInProduction()) {
+        return;
+    }
+
+    const response = await fetch('/local/post-content');
+    const data = await response.json();
+
+    form.title = data.title;
+    form.body = data.body;
 };
 </script>
 
@@ -50,14 +58,13 @@ const autofill = () => {
                     <MarkdownEditor v-model="form.body">
                         <template
                             #toolbar="{
-                                editor,
                                 toolbarButtonBase,
                                 toolbarButtonActive,
                                 toolbarButtonInactive,
                                 isHeadingActive,
                             }"
                         >
-                            <li>
+                            <li v-if="!isInProduction()">
                                 <button
                                     type="button"
                                     class="hover:cursor-pointer"
@@ -67,7 +74,7 @@ const autofill = () => {
                                             ? toolbarButtonActive
                                             : toolbarButtonInactive,
                                     ]"
-                                    aria-label="Cabeçalho nível 4"
+                                    aria-label="Import Markdown"
                                     :aria-pressed="isHeadingActive(4)"
                                     @click="autofill"
                                 >

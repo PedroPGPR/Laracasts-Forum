@@ -4,12 +4,11 @@ import moment from 'moment';
 import { computed, ref } from 'vue';
 import Comment from '@/components/Comment.vue';
 import InputError from '@/components/InputError.vue';
+import MarkdownEditor from '@/components/MarkdownEditor.vue';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Pagination from '@/components/ui/Pagination.vue';
-import { Textarea } from '@/components/ui/textarea';
 import { useNotification } from '@/composables/useNotification';
-import MarkdownEditor from '@/components/MarkdownEditor.vue';
 
 const { confirmNotification } = useNotification();
 
@@ -94,7 +93,7 @@ const deleteComment = (id: number) => {
 
 <template>
     <div class="my-10 flex flex-col gap-10">
-        <Card class="mx-auto w-2/3 p-5">
+        <Card class="mx-auto w-4/5 p-5">
             <h1 class="font-bold">{{ props.post.title }}</h1>
             <div>
                 <div class="flex justify-between">

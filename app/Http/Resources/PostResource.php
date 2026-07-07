@@ -24,6 +24,7 @@ class PostResource extends JsonResource
             'created_at' => $this->created_at,
 
             'user' => new UserResource($this->whenLoaded('user')),
+            'topic' => new TopicResource($this->whenLoaded('topic')),
 
             'routes' => [
                 'show' => $this->showRoute(),

@@ -21,7 +21,7 @@ class PostController extends Controller
         $this->authorize('view-any', Post::class);
 
         return Inertia::render('posts/Index', [
-            'posts' => PostResource::collection(Post::latest()->latest('id')->paginate(15)),
+            'posts' => PostResource::collection(Post::with(['user', 'topic'])->latest()->latest('id')->paginate(15)),
         ]);
     }
 
@@ -54,7 +54,7 @@ class PostController extends Controller
             return redirect($post->showRoute($request->query()), 301);
         }
 
-        $post->load(['user']);
+        $post->load(['user', 'topic']);
         $comments = $post->comments()->with('user')->latest()->latest('id')->paginate(5);
 
         return Inertia::render('posts/Show', [

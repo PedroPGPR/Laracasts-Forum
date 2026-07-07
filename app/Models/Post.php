@@ -13,15 +13,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
-#[Fillable(['title', 'body', 'html', 'user_id'])]
+#[Fillable(['title', 'body', 'html', 'user_id', 'topic_id'])]
 class Post extends Model
 {
-    use HasFactory;
     use ConvertMarkdownToHtml;
+    use HasFactory;
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function topic(): BelongsTo
+    {
+        return $this->belongsTo(Topic::class);
     }
 
     public function comments(): HasMany

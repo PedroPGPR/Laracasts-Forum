@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { router } from '@inertiajs/vue3';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import moment from 'moment/moment';
+import { Badge } from '@/components/ui/badge';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import Pagination from '@/components/ui/Pagination.vue';
 import type { PostIndexResponse } from '@/types/post';
 
@@ -10,7 +17,7 @@ defineProps<{
 </script>
 
 <template>
-    <section class="mx-auto mb-3 max-w-6xl space-y-6 px-4 py-6">
+    <section class="mx-auto mb-3 w-full space-y-6 px-4 py-6">
         <div class="space-y-1 text-center">
             <h1 class="text-3xl font-bold tracking-tight">Posts</h1>
             <p class="text-muted-foreground">
@@ -18,28 +25,31 @@ defineProps<{
             </p>
         </div>
 
-        <div
-            v-if="posts.data.length"
-            class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
-        >
+        <div v-if="posts.data.length" class="flex flex-col gap-4">
             <Card
                 v-for="post in posts.data"
                 :key="post.id"
                 class="h-full border-border/80 transition-shadow hover:cursor-pointer hover:border-[#3D4368CC] hover:bg-[#3D4368] hover:shadow-md"
                 @click="router.visit(post.routes.show)"
             >
-                <CardHeader>
-                    <CardTitle class="text-lg leading-6">
-                        {{ post.title }}
-                    </CardTitle>
+                <CardHeader class="flex justify-between items-center">
+                    <div class="flex flex-col gap-2">
+                        <CardTitle class="text-lg leading-6 whitespace-normal">
+                            {{ post.title }}
+                        </CardTitle>
+                        <div class="text-sm text-muted-foreground">
+                            <p>
+                                Created by: {{ post.user.name }}
+                                <span class="opacity-55">{{
+                                    moment(post.created_at).fromNow()
+                                }}</span>
+                            </p>
+                        </div>
+                    </div>
+                    <Badge variant="default" class="hover:opacity-80">
+                        {{ post.topic.name }}
+                    </Badge>
                 </CardHeader>
-                <CardContent>
-                    <p
-                        class="max-h-32 overflow-hidden text-sm text-muted-foreground"
-                    >
-                        {{ post.body }}
-                    </p>
-                </CardContent>
             </Card>
         </div>
 

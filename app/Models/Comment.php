@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable(['user_id', 'post_id', 'body', 'html'])]
 class Comment extends Model
 {
-    use HasFactory;
     use ConvertMarkdownToHtml;
+    use HasFactory;
 
     public function user(): BelongsTo
     {
