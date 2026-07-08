@@ -1,5 +1,4 @@
 import type { Auth } from '@/types/auth';
-import type { route as ziggyRoute } from 'ziggy-js';
 
 // Extend ImportMeta interface for Vite...
 declare module 'vite/client' {
@@ -22,18 +21,5 @@ declare module '@inertiajs/core' {
             sidebarOpen: boolean;
             [key: string]: unknown;
         };
-    }
-}
-
-declare global {
-    let route: typeof ziggyRoute;
-}
-
-declare module 'vue' {
-    interface ComponentCustomProperties {
-        $inertia: typeof Router;
-        $page: Page;
-        $headManager: ReturnType<typeof createHeadManager>;
-        route: typeof ziggyRoute;
     }
 }

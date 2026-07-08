@@ -2,17 +2,13 @@
 import { router } from '@inertiajs/vue3';
 import moment from 'moment/moment';
 import { Badge } from '@/components/ui/badge';
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Pagination from '@/components/ui/Pagination.vue';
-import type { PostIndexResponse } from '@/types/post';
+import posts from '@/wayfinder/routes/posts';
+import { App } from '@/wayfinder/types';
 
-defineProps<{
-    posts: PostIndexResponse;
+const props = defineProps<{
+    posts: App.Http.Resources;
 }>();
 </script>
 
@@ -21,18 +17,19 @@ defineProps<{
         <div class="space-y-1 text-center">
             <h1 class="text-3xl font-bold tracking-tight">Posts</h1>
             <p class="text-muted-foreground">
-                Lista de posts disponíveis ({{ posts.data.length }})
+                <pre>{{ props.posts }}</pre>
+                Lista de posts disponíveis ({{ props.posts.data.length }})
             </p>
         </div>
 
-        <div v-if="posts.data.length" class="flex flex-col gap-4">
+        <div v-if="props.posts.data.length" class="flex flex-col gap-4">
             <Card
-                v-for="post in posts.data"
+                v-for="post in props.posts.data"
                 :key="post.id"
                 class="h-full border-border/80 transition-shadow hover:cursor-pointer hover:border-[#3D4368CC] hover:bg-[#3D4368] hover:shadow-md"
-                @click="router.visit(post.routes.show)"
+                @click="posts.show({ post: post.id })"
             >
-                <CardHeader class="flex justify-between items-center">
+                <CardHeader class="flex items-center justify-between">
                     <div class="flex flex-col gap-2">
                         <CardTitle class="text-lg leading-6 whitespace-normal">
                             {{ post.title }}
@@ -46,7 +43,17 @@ defineProps<{
                             </p>
                         </div>
                     </div>
-                    <Badge variant="default" class="hover:opacity-80">
+                    <Badge
+                        variant="default"
+                        class="hover:opacity-80"
+                        @click="
+                            router.visit(
+                                posts.index({
+                                    topic: post.topic.slug,
+                                }),
+                            )
+                        "
+                    >
                         {{ post.topic.name }}
                     </Badge>
                 </CardHeader>
@@ -59,7 +66,7 @@ defineProps<{
             </CardContent>
         </Card>
 
-        <Pagination :meta="posts.meta" :only="['posts']" />
+        <Pagination :meta="props.posts.meta" :only="['posts']" />
     </section>
 </template>
 

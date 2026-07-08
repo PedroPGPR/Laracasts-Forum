@@ -8,8 +8,8 @@ import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { edit } from '@/routes/profile';
-import { send } from '@/routes/verification';
+import { edit } from '@/wayfinder/routes/profile';
+import { send } from '@/wayfinder/routes/verification';
 
 type Props = {
     mustVerifyEmail: boolean;

@@ -11,8 +11,8 @@ import TwoFactorSetupModal from '@/components/TwoFactorSetupModal.vue';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { useTwoFactorAuth } from '@/composables/useTwoFactorAuth';
-import { edit } from '@/routes/security';
-import { disable, enable } from '@/routes/two-factor';
+import { edit } from '@/wayfinder/routes/security';
+import { disable, enable } from '@/wayfinder/routes/two-factor';
 
 type Props = {
     canManageTwoFactor?: boolean;

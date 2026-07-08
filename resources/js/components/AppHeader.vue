@@ -41,6 +41,7 @@ import UserMenuContent from '@/components/UserMenuContent.vue';
 import { useCurrentUrl } from '@/composables/useCurrentUrl';
 import { getInitials } from '@/composables/useInitials';
 import { toUrl } from '@/lib/utils';
+import posts from '@/wayfinder/routes/posts';
 import type { BreadcrumbItem, NavItem } from '@/types';
 
 type Props = {
@@ -59,10 +60,11 @@ const activeItemStyles =
     'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100';
 
 const mainNavItems = computed<NavItem[]>(() => {
+    console.log('posts.create.url() = ', posts.create.url());
     const items: NavItem[] = [
         {
             title: 'Posts',
-            href: route('posts.index'),
+            href: posts.index.url(),
             icon: LayoutGrid,
         },
     ];
@@ -70,7 +72,7 @@ const mainNavItems = computed<NavItem[]>(() => {
     if (page.props.permissions.create_posts) {
         items.push({
             title: 'Create Post',
-            href: route('posts.create'),
+            href: posts.create.url(),
             icon: CirclePlus,
         });
     }

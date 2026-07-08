@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { isInProduction } from '@/lib/utils';
+import posts from '@/wayfinder/routes/posts';
 
 const form = useForm({
     title: '',
@@ -13,7 +14,7 @@ const form = useForm({
 });
 
 const createPost = () => {
-    form.post(route('posts.store'), {
+    form.post(posts.store.url(), {
         onSuccess: () => {
             form.reset();
         },

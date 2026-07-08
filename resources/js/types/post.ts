@@ -1,7 +1,13 @@
 type Post = {
+    topic: any;
     id: number;
     title: string;
     body: string;
+    user: {
+        name: string;
+    };
+    created_at: string;
+    updated_at: string;
     routes: {
         show: string;
     };

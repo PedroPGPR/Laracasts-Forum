@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Pagination from '@/components/ui/Pagination.vue';
 import { useNotification } from '@/composables/useNotification';
+import commentsRoutes from '@/wayfinder/routes/posts/comments';
 
 const { confirmNotification } = useNotification();
 
@@ -45,7 +46,7 @@ const cancelUpdate = () => {
 };
 
 const addComment = () => {
-    form.post(route('posts.comments.store', props.post.id), {
+    form.post(commentsRoutes.store.url(props.post.id), {
         preserveScroll: true,
         onSuccess: () => form.reset('body'),
     });
@@ -53,11 +54,10 @@ const addComment = () => {
 
 const updateComment = () => {
     form.put(
-        route('posts.comments.update', {
-            post: props.post.id,
-            comment: commentIDBeingEdited.value,
-            page: props.comments.meta.current_page,
-        }),
+        commentsRoutes.update.url(
+            { post: props.post.id, comment: commentIDBeingEdited.value },
+            { query: { page: props.comments.meta.current_page } },
+        ),
         {
             preserveScroll: true,
             onSuccess: () => {
@@ -76,11 +76,10 @@ const deleteComment = (id: number) => {
             'You are about to delete this comment. You sure you want to delete it?',
         confirmAction: async () => {
             router.delete(
-                route('posts.comments.destroy', {
-                    post: props.post.id,
-                    comment: id,
-                    page: props.comments.meta.current_page,
-                }),
+                commentsRoutes.destroy.url(
+                    { post: props.post.id, comment: id },
+                    { query: { page: props.comments.meta.current_page } },
+                ),
                 {
                     preserveScroll: true,
                 },

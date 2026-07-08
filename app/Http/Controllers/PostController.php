@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
+use App\Models\Topic;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -16,12 +17,18 @@ class PostController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index()
+    public function index(?Topic $topic = null)
     {
         $this->authorize('view-any', Post::class);
 
+        $posts = Post::with(['user', 'topic'])
+            ->when($topic, fn ($query) => $query->where('topic_id', $topic->id))
+            ->latest()
+            ->latest('id')
+            ->paginate(15);
+
         return Inertia::render('posts/Index', [
-            'posts' => PostResource::collection(Post::with(['user', 'topic'])->latest()->latest('id')->paginate(15)),
+            'posts' => PostResource::collection($posts),
         ]);
     }
 

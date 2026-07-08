@@ -9,34 +9,22 @@ Route::inertia('/', 'Welcome', [
     'canRegister' => Features::enabled(Features::registration()),
 ])->name('home');
 
-// Posts
+// Posts & Comments
 Route::prefix('posts')->group(function () {
-    Route::get('/', [PostController::class, 'index'])
-        ->name('posts.index');
+    // Rotas estáticas/fixas protegidas por autenticação
+    Route::middleware('auth')->group(function () {
+        Route::get('/create', [PostController::class, 'create'])->name('posts.create');
+        Route::post('/', [PostController::class, 'store'])->name('posts.store');
 
-    Route::get('/create', [PostController::class, 'create'])
-        ->middleware('auth')
-        ->name('posts.create');
+        // Comentários
+        Route::post('/{post}/comments', [CommentController::class, 'store'])->name('posts.comments.store');
+        Route::put('/{post}/comments/{comment}', [CommentController::class, 'update'])->name('posts.comments.update');
+        Route::delete('/{post}/comments/{comment}', [CommentController::class, 'destroy'])->name('posts.comments.destroy');
+    });
 
-    Route::get('/{post}/{slug?}', [PostController::class, 'show'])
-        ->name('posts.show');
-
-    Route::post('/', [PostController::class, 'store'])
-        ->middleware('auth')
-        ->name('posts.store');
-
-    // Post -> Comments
-    Route::post('/{post}/comments', [CommentController::class, 'store'])
-        ->middleware('auth')
-        ->name('posts.comments.store');
-
-    Route::put('/{post}/comments/{comment}', [CommentController::class, 'update'])
-        ->middleware('auth')
-        ->name('posts.comments.update');
-
-    Route::delete('/{post}/comments/{comment}', [CommentController::class, 'destroy'])
-        ->middleware('auth')
-        ->name('posts.comments.destroy');
+    // Rotas dinâmicas públicas
+    Route::get('/{post}/{slug?}', [PostController::class, 'show'])->name('posts.show');
+    Route::get('/{topic?}', [PostController::class, 'index'])->name('posts.index');
 });
 
 require __DIR__.'/settings.php';

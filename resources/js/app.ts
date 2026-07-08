@@ -5,7 +5,6 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
 import { initializeFlashToast } from '@/lib/flashToast';
-import { route, ZiggyVue } from 'ziggy-js';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -24,19 +23,12 @@ createInertiaApp({
         }
     },
     setup({ el, App, props, plugin }) {
-        const ziggyConfig = (props.initialPage.props as Record<string, unknown>).ziggy as object | undefined;
         const isServer = el === null;
         const app = isServer
             ? createSSRApp({ render: () => h(App, props) })
             : createApp({ render: () => h(App, props) });
 
         app.use(plugin);
-        app.use(ZiggyVue, ziggyConfig);
-
-        // Make route() available globally in both browser and SSR (Node.js) contexts
-        const boundRoute = (name: Parameters<typeof route>[0], params?: Parameters<typeof route>[1], absolute?: Parameters<typeof route>[2]) =>
-            route(name, params, absolute, ziggyConfig);
-        (globalThis as Record<string, unknown>).route = boundRoute;
 
         if (!isServer) {
             app.mount(el!);
