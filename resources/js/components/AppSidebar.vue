@@ -14,8 +14,8 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { home } from '@/wayfinder/routes';
 import type { NavItem } from '@/types';
+import { home } from '@/wayfinder/routes';
 
 const mainNavItems: NavItem[] = [
     {

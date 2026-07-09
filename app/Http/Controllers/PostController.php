@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\PostResource;
+use App\Http\Resources\TopicResource;
 use App\Models\Post;
 use App\Models\Topic;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -29,6 +30,8 @@ class PostController extends Controller
 
         return Inertia::render('posts/Index', [
             'posts' => PostResource::collection($posts),
+            'topics' => fn () => TopicResource::collection(Topic::all()),
+            'selectedTopic' => fn () => $topic instanceof Topic ? TopicResource::make($topic) : null,
         ]);
     }
 
@@ -36,13 +39,16 @@ class PostController extends Controller
     {
         $this->authorize('create', Post::class);
 
-        return Inertia::render('posts/Create');
+        return Inertia::render('posts/Create', [
+            'topics' => fn () => TopicResource::collection(Topic::all()),
+        ]);
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:120', 'min:10'],
+            'topic_id' => ['required', 'exists:topics,id'],
             'body' => ['required', 'string', 'min:100', 'max:10000'],
         ]);
 

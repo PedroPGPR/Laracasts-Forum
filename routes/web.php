@@ -23,8 +23,12 @@ Route::prefix('posts')->group(function () {
     });
 
     // Rotas dinâmicas públicas
-    Route::get('/{post}/{slug?}', [PostController::class, 'show'])->name('posts.show');
-    Route::get('/{topic?}', [PostController::class, 'index'])->name('posts.index');
+    Route::get('/{topic?}', [PostController::class, 'index'])
+        ->where('topic', '[A-Za-z\-]+')
+        ->name('posts.index');
+    Route::get('/{post}/{slug?}', [PostController::class, 'show'])
+        ->where('post', '[0-9]+')
+        ->name('posts.show');
 });
 
 require __DIR__.'/settings.php';

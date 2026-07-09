@@ -1,16 +1,37 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import InputError from '@/components/InputError.vue';
 import MarkdownEditor from '@/components/MarkdownEditor.vue';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { isInProduction } from '@/lib/utils';
+import type { PostTopic } from '@/types/post';
 import posts from '@/wayfinder/routes/posts';
+
+const props = defineProps<{
+    topics: PostTopic[];
+}>();
 
 const form = useForm({
     title: '',
+    topic_id: 0,
     body: '',
+});
+
+const selectedTopicId = computed({
+    get: () => (form.topic_id ? form.topic_id : 0),
+    set: (value: string|number) => {
+        form.topic_id = Number(value);
+    },
 });
 
 const createPost = () => {
@@ -50,6 +71,28 @@ const autofill = async () => {
                     />
                     <InputError
                         :message="form.errors.title"
+                        class="mt-1 text-sm"
+                    />
+                </div>
+
+                <div class="mb-4">
+                    <label for="topic_id" class="px-1">Topic: </label>
+                    <Select v-model="selectedTopicId">
+                        <SelectTrigger id="topic_id" class="mt-1 w-full">
+                            <SelectValue placeholder="Select a topic" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem
+                                v-for="topic in props.topics"
+                                :key="topic.id"
+                                :value="topic.id"
+                            >
+                                {{ topic.name }}
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
+                    <InputError
+                        :message="form.errors.topic_id"
                         class="mt-1 text-sm"
                     />
                 </div>

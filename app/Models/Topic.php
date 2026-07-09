@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Override;
 
 #[Fillable(['slug', 'name', 'description'])]
 class Topic extends Model
@@ -19,6 +20,7 @@ class Topic extends Model
         return $this->hasMany(Post::class);
     }
 
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'slug';
