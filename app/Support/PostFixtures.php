@@ -14,16 +14,12 @@ class PostFixtures
 
     public static function getFixturePosts(): Collection
     {
-        if (! isset(self::$fixturePosts)) {
-            self::$fixturePosts = collect(File::files(database_path('factories/fixtures/posts')))
-                ->map(fn (SplFileInfo $fileInfo) => $fileInfo->getContents())
-                ->map(fn (string $contents) => str($contents)->explode("\n", 2))
-                ->map(fn (Collection $parts) => [
-                    'title' => str($parts[0])->trim()->after('# '),
-                    'body' => str($parts[1])->trim(),
-                ]);
-        }
-
-        return self::$fixturePosts;
+        return once(fn () => collect(File::files(database_path('factories/fixtures/posts')))
+            ->map(fn (SplFileInfo $fileInfo) => $fileInfo->getContents())
+            ->map(fn (string $contents) => str($contents)->explode("\n", 2))
+            ->map(fn (Collection $parts) => [
+                'title' => str($parts[0])->trim()->after('# '),
+                'body' => str($parts[1])->trim(),
+            ]));
     }
 }

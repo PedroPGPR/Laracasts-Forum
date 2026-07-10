@@ -60,7 +60,6 @@ const activeItemStyles =
     'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100';
 
 const mainNavItems = computed<NavItem[]>(() => {
-    console.log('posts.create.url() = ', posts.create.url());
     const items: NavItem[] = [
         {
             title: 'Posts',

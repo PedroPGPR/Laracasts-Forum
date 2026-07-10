@@ -10,6 +10,7 @@ import { Card } from '@/components/ui/card';
 import Pagination from '@/components/ui/Pagination.vue';
 import { useNotification } from '@/composables/useNotification';
 import commentsRoutes from '@/wayfinder/routes/posts/comments';
+import { Badge } from '@/components/ui/badge';
 
 const { confirmNotification } = useNotification();
 
@@ -95,8 +96,13 @@ const deleteComment = (id: number) => {
         <Card class="mx-auto w-4/5 p-5">
             <h1 class="font-bold">{{ props.post.title }}</h1>
             <div>
-                <div class="flex justify-between">
-                    <div>Created by: {{ props.post.user.name }}<br /></div>
+                <div class="flex flex-col justify-between content-center">
+                    <div class="flex justify-between">
+                        <div>Created by: {{ props.post.user.name }}</div>
+                        <Badge variant="default" class="hover:opacity-80">
+                            {{ props.post.topic.name }}
+                        </Badge>
+                    </div>
                     <div class="opacity-55">
                         {{ moment(props.post.created_at).fromNow() }}
                     </div>
