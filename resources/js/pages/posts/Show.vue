@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { router, useForm } from '@inertiajs/vue3';
+import { Head, router, useForm } from '@inertiajs/vue3';
 import moment from 'moment';
 import { computed, ref } from 'vue';
 import Comment from '@/components/Comment.vue';
@@ -96,6 +96,10 @@ const deleteComment = (id: number) => {
 </script>
 
 <template>
+    <Head>
+        <link rel="canonical" :href="props.post.routes.show" />
+    </Head>
+
     <div class="my-10 flex flex-col gap-10">
         <Card class="mx-auto w-4/5 p-5">
             <h1 class="font-bold">{{ props.post.title }}</h1>
