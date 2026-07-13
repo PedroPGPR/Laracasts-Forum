@@ -79,8 +79,12 @@ const deleteComment = (id: number) => {
             router.delete(
                 commentsRoutes.destroy.url(
                     { post: props.post.id, comment: id },
-                    { query: { page: props.comments.meta.current_page } },
-                ),
+                    { query: {
+                        page: props.comments.data.length > 1
+                            ? props.comments.meta.current_page
+                            : Math.max(props.comments.meta.current_page - 1, 1)
+                    }
+                }),
                 {
                     preserveScroll: true,
                 },

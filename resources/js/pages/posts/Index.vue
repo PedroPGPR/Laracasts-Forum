@@ -97,7 +97,7 @@ const props = defineProps<{
             </div>
         </div>
 
-        <Pagination :meta="props.postsData.meta" :only="['posts']" />
+        <Pagination :meta="props.postsData.meta" :only="['postsData']" />
     </section>
 </template>
 

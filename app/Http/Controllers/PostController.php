@@ -63,7 +63,7 @@ class PostController extends Controller
     {
         $this->authorize('view', $post);
 
-        if (! Str::contains($post->showRoute(), $request->path())) {
+        if (! Str::endsWith($post->showRoute(), $request->path())) {
             return redirect($post->showRoute($request->query()), 301);
         }
 
