@@ -6,9 +6,8 @@ use App\Models\Like;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
-class LikeController extends Controller
+class DislikeController extends Controller
 {
     use AuthorizesRequests;
 
@@ -22,10 +21,10 @@ class LikeController extends Controller
         $likeable = Relation::getMorphedModel($validatedData['model'])::findOrFail($validatedData['id']);
         $this->authorize('create', [Like::class, $likeable]);
 
-        $likeable->likes()->create(['user_id' => $request->user()->id]);
-        $likeable->increment('likes_count');
+        $likeable->dislikes()->create(['user_id' => $request->user()->id]);
+        $likeable->increment('dislikes_count');
 
-        return back()->with('success', 'Liked successfully.');
+        return back()->with('success', 'Disliked successfully.');
     }
 
     public function destroy(Request $request)
@@ -38,9 +37,9 @@ class LikeController extends Controller
         $likeable = Relation::getMorphedModel($validatedData['model'])::findOrFail($validatedData['id']);
         $this->authorize('delete', [Like::class, $likeable]);
 
-        $likeable->likes()->where('user_id', $request->user()->id)->delete();
-        $likeable->decrement('likes_count');
+        $likeable->dislikes()->where('user_id', $request->user()->id)->delete();
+        $likeable->decrement('dislikes_count');
 
-        return back()->with('success', 'Like removed successfully.');
+        return back()->with('success', 'Dislike removed successfully.');
     }
 }

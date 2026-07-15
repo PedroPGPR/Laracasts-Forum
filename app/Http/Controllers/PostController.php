@@ -73,6 +73,8 @@ class PostController extends Controller
         return Inertia::render('posts/Show', [
             'post' => PostResource::make($post),
             'comments' => CommentResource::collection($comments),
+            'isLiked' => $request->user()?->hasLiked($post) ?? false,
+            'isDisliked' => $request->user()?->hasDisliked($post) ?? false,
         ]);
     }
 

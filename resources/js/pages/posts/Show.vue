@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, router, useForm } from '@inertiajs/vue3';
+import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import moment from 'moment';
 import { computed, ref } from 'vue';
 import Comment from '@/components/Comment.vue';
@@ -11,6 +11,15 @@ import Pagination from '@/components/ui/Pagination.vue';
 import { useNotification } from '@/composables/useNotification';
 import commentsRoutes from '@/wayfinder/routes/posts/comments';
 import { Badge } from '@/components/ui/badge';
+import { ThumbsUp, ThumbsDown } from 'lucide-vue-next';
+import {
+    destroy as destroyLike,
+    store as storeLike,
+} from '@/wayfinder/App/Http/Controllers/LikeController';
+import {
+    destroy as destroyDislike,
+    store as storeDislike,
+} from '@/wayfinder/App/Http/Controllers/DislikeController';
 
 const { confirmNotification } = useNotification();
 
@@ -21,6 +30,14 @@ const props = defineProps({
     },
     comments: {
         type: Object,
+        required: true,
+    },
+    isLiked: {
+        type: Boolean,
+        required: true,
+    },
+    isDisliked: {
+        type: Boolean,
         required: true,
     },
 });
@@ -79,12 +96,18 @@ const deleteComment = (id: number) => {
             router.delete(
                 commentsRoutes.destroy.url(
                     { post: props.post.id, comment: id },
-                    { query: {
-                        page: props.comments.data.length > 1
-                            ? props.comments.meta.current_page
-                            : Math.max(props.comments.meta.current_page - 1, 1)
-                    }
-                }),
+                    {
+                        query: {
+                            page:
+                                props.comments.data.length > 1
+                                    ? props.comments.meta.current_page
+                                    : Math.max(
+                                          props.comments.meta.current_page - 1,
+                                          1,
+                                      ),
+                        },
+                    },
+                ),
                 {
                     preserveScroll: true,
                 },
@@ -104,7 +127,7 @@ const deleteComment = (id: number) => {
         <Card class="mx-auto w-4/5 p-5">
             <h1 class="font-bold">{{ props.post.title }}</h1>
             <div>
-                <div class="flex flex-col justify-between content-center">
+                <div class="flex flex-col content-center justify-between">
                     <div class="flex justify-between">
                         <div>Created by: {{ props.post.user.name }}</div>
                         <Badge variant="default" class="hover:opacity-80">
@@ -119,6 +142,57 @@ const deleteComment = (id: number) => {
                     v-html="props.post.html"
                     class="prose prose-sm mt-2 max-w-none dark:prose-invert"
                 ></article>
+                <hr />
+                <div class="mt-3 flex justify-end">
+                    <div class="flex items-center gap-2">
+                        <div
+                            class="flex flex-col content-center items-center gap-2"
+                        >
+                            <Link
+                                :href="!isLiked ? storeLike() : destroyLike()"
+                                :data="{
+                                    model: 'post',
+                                    id: props.post.id,
+                                }"
+                            >
+                                <ThumbsUp
+                                    :size="24"
+                                    color="#6272A4"
+                                    :fill="isLiked ? '#6272A4' : '#6272A499'"
+                                    class="hover:cursor-pointer"
+                                />
+                            </Link>
+                            <span class="text-sm">
+                                {{ props.post.likes_count }}
+                            </span>
+                        </div>
+                        <div
+                            class="flex flex-col content-center items-center gap-2"
+                        >
+                            <Link
+                                :href="
+                                    !isDisliked
+                                        ? storeDislike()
+                                        : destroyDislike()
+                                "
+                                :data="{
+                                    model: 'post',
+                                    id: props.post.id,
+                                }"
+                            >
+                                <ThumbsDown
+                                    :size="22"
+                                    color="#FF5555"
+                                    :fill="isDisliked ? '#FF5555' : '#FF555599'"
+                                    class="hover:cursor-pointer"
+                                />
+                            </Link>
+                            <span class="text-sm">
+                                {{ props.post.dislikes_count ?? 0 }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </Card>
 

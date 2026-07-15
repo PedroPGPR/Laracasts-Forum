@@ -15,6 +15,8 @@ return new class extends Migration
             $table->string('title');
             $table->longText('body');
             $table->longText('html');
+            $table->unsignedBigInteger('likes_count')->default(0);
+            $table->unsignedBigInteger('dislikes_count')->default(0);
             $table->timestamps();
         });
     }

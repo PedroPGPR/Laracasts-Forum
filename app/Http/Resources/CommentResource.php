@@ -7,6 +7,7 @@ namespace App\Http\Resources;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Number;
 use Override;
 
 /** @mixin Comment */
@@ -19,6 +20,8 @@ class CommentResource extends JsonResource
             'id' => $this->id,
             'body' => $this->body,
             'html' => $this->html,
+            'likes_count' => Number::abbreviate($this->likes_count),
+            'dislikes_count' => Number::abbreviate($this->dislikes_count),
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,
 

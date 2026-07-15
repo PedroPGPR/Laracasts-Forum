@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\DislikeController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -20,6 +22,8 @@ Route::prefix('posts')->group(function () {
         Route::post('/{post}/comments', [CommentController::class, 'store'])->name('posts.comments.store');
         Route::put('/{post}/comments/{comment}', [CommentController::class, 'update'])->name('posts.comments.update');
         Route::delete('/{post}/comments/{comment}', [CommentController::class, 'destroy'])->name('posts.comments.destroy');
+
+
     });
 
     // Rotas dinâmicas públicas
@@ -30,5 +34,21 @@ Route::prefix('posts')->group(function () {
         ->where('post', '[0-9]+')
         ->name('posts.show');
 });
+
+// Likes
+Route::post('/likes', [LikeController::class, 'store'])
+    ->middleware('auth')
+    ->name('likes.store');
+Route::delete('/likes', [LikeController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('likes.destroy');
+
+// Dislikes
+Route::post('/dislikes', [DislikeController::class, 'store'])
+    ->middleware('auth')
+    ->name('dislikes.store');
+Route::delete('/dislikes', [DislikeController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('dislikes.destroy');
 
 require __DIR__.'/settings.php';

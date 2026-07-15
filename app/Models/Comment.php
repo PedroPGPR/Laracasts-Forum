@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-#[Fillable(['user_id', 'post_id', 'body', 'html'])]
+#[Fillable(['user_id', 'post_id', 'body', 'html', 'likes_count', 'dislikes_count'])]
 class Comment extends Model
 {
     use ConvertMarkdownToHtml;
@@ -30,5 +30,10 @@ class Comment extends Model
     public function likes(): MorphMany
     {
         return $this->morphMany(Like::class, 'likeable');
+    }
+
+    public function dislikes(): MorphMany
+    {
+        return $this->morphMany(Dislike::class, 'dislikeable');
     }
 }

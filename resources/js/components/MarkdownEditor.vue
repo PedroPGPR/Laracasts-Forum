@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Link } from '@tiptap/extension-link';
 import { Placeholder } from '@tiptap/extension-placeholder';
 import { StarterKit } from '@tiptap/starter-kit';
 import { EditorContent, useEditor } from '@tiptap/vue-3';
@@ -45,7 +44,6 @@ const editor = useEditor({
             code: false,
             codeBlock: false,
         }),
-        Link,
         Markdown,
         Placeholder.configure({
             placeholder: props.placeholder,

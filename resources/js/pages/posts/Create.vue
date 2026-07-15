@@ -98,7 +98,7 @@ const autofill = async () => {
                 </div>
 
                 <div class="mb-4 flex flex-col">
-                    <label for="body" class="px-1">Body</label>
+                    <label for="body" class="px-1 mb-1">Body: </label>
                     <MarkdownEditor v-model="form.body">
                         <template
                             #toolbar="{
