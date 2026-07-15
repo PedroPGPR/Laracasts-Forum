@@ -1,25 +1,25 @@
 <script setup lang="ts">
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
+import { ThumbsUp, ThumbsDown } from 'lucide-vue-next';
 import moment from 'moment';
 import { computed, ref } from 'vue';
 import Comment from '@/components/Comment.vue';
 import InputError from '@/components/InputError.vue';
 import MarkdownEditor from '@/components/MarkdownEditor.vue';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Pagination from '@/components/ui/Pagination.vue';
 import { useNotification } from '@/composables/useNotification';
-import commentsRoutes from '@/wayfinder/routes/posts/comments';
-import { Badge } from '@/components/ui/badge';
-import { ThumbsUp, ThumbsDown } from 'lucide-vue-next';
-import {
-    destroy as destroyLike,
-    store as storeLike,
-} from '@/wayfinder/App/Http/Controllers/LikeController';
 import {
     destroy as destroyDislike,
     store as storeDislike,
 } from '@/wayfinder/App/Http/Controllers/DislikeController';
+import {
+    destroy as destroyLike,
+    store as storeLike,
+} from '@/wayfinder/App/Http/Controllers/LikeController';
+import commentsRoutes from '@/wayfinder/routes/posts/comments';
 
 const { confirmNotification } = useNotification();
 
