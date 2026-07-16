@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Models\Dislike;
 use App\Models\Like;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -21,7 +22,7 @@ class DislikeController extends Controller
         ]);
 
         $likeable = Relation::getMorphedModel($validatedData['model'])::findOrFail($validatedData['id']);
-        $this->authorize('create', [Like::class, $likeable]);
+        $this->authorize('create', [Dislike::class, $likeable]);
 
         $likeable->dislikes()->create(['user_id' => $request->user()->id]);
         $likeable->increment('dislikes_count');
@@ -37,7 +38,7 @@ class DislikeController extends Controller
         ]);
 
         $likeable = Relation::getMorphedModel($validatedData['model'])::findOrFail($validatedData['id']);
-        $this->authorize('delete', [Like::class, $likeable]);
+        $this->authorize('delete', [Dislike::class, $likeable]);
 
         $likeable->dislikes()->where('user_id', $request->user()->id)->delete();
         $likeable->decrement('dislikes_count');

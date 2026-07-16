@@ -58,11 +58,11 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function hasLiked(Model $model): bool
     {
-        return $this->likes()->where('likeable_id', $model->id)->where('likeable_type', $model::class)->exists();
+        return $this->likes()->where('likeable_id', $model->getKey())->where('likeable_type', $model->getMorphClass())->exists();
     }
 
     public function hasDisliked(Model $model): bool
     {
-        return $this->dislikes()->where('dislikeable_id', $model->id)->where('dislikeable_type', $model::class)->exists();
+        return $this->dislikes()->where('dislikeable_id', $model->getKey())->where('dislikeable_type', $model->getMorphClass())->exists();
     }
 }

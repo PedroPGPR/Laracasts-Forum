@@ -11,17 +11,11 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Pagination from '@/components/ui/Pagination.vue';
 import { useNotification } from '@/composables/useNotification';
-import {
-    destroy as destroyDislike,
-    store as storeDislike,
-} from '@/wayfinder/App/Http/Controllers/DislikeController';
-import {
-    destroy as destroyLike,
-    store as storeLike,
-} from '@/wayfinder/App/Http/Controllers/LikeController';
+import { useReaction } from '@/composables/useReaction';
 import commentsRoutes from '@/wayfinder/routes/posts/comments';
 
 const { confirmNotification } = useNotification();
+const { like, unlike, dislike, undislike } = useReaction();
 
 const props = defineProps({
     post: {
@@ -30,14 +24,6 @@ const props = defineProps({
     },
     comments: {
         type: Object,
-        required: true,
-    },
-    isLiked: {
-        type: Boolean,
-        required: true,
-    },
-    isDisliked: {
-        type: Boolean,
         required: true,
     },
 });
@@ -116,6 +102,21 @@ const deleteComment = (id: number) => {
         cancelAction: false,
     });
 };
+
+const toggleLike = () => {
+    if (!props.post.isLiked) {
+        like('post', props.post.id);
+    } else {
+        unlike('post', props.post.id);
+    }
+};
+const toggleDislike = () => {
+    if (!props.post.isDisliked) {
+        dislike('post', props.post.id);
+    } else {
+        undislike('post', props.post.id);
+    }
+};
 </script>
 
 <template>
@@ -148,45 +149,27 @@ const deleteComment = (id: number) => {
                         <div
                             class="flex flex-col content-center items-center gap-2"
                         >
-                            <Link
-                                :href="!isLiked ? storeLike() : destroyLike()"
-                                :data="{
-                                    model: 'post',
-                                    id: props.post.id,
-                                }"
-                            >
-                                <ThumbsUp
-                                    :size="24"
-                                    color="#6272A4"
-                                    :fill="isLiked ? '#6272A4' : '#6272A499'"
-                                    class="hover:cursor-pointer"
-                                />
-                            </Link>
+                            <ThumbsUp
+                                :size="24"
+                                color="#6272A4"
+                                :fill="props.post.isLiked ? '#6272A4' : '#6272A499'"
+                                class="hover:cursor-pointer"
+                                @click="toggleLike"
+                            />
                             <span class="text-sm">
-                                {{ props.post.likes_count }}
+                                {{ props.post.likes_count ?? 0 }}
                             </span>
                         </div>
                         <div
                             class="flex flex-col content-center items-center gap-2"
                         >
-                            <Link
-                                :href="
-                                    !isDisliked
-                                        ? storeDislike()
-                                        : destroyDislike()
-                                "
-                                :data="{
-                                    model: 'post',
-                                    id: props.post.id,
-                                }"
-                            >
-                                <ThumbsDown
-                                    :size="22"
-                                    color="#FF5555"
-                                    :fill="isDisliked ? '#FF5555' : '#FF555599'"
-                                    class="hover:cursor-pointer"
-                                />
-                            </Link>
+                            <ThumbsDown
+                                :size="22"
+                                color="#FF5555"
+                                :fill="props.post.isDisliked ? '#FF5555' : '#FF555599'"
+                                class="hover:cursor-pointer"
+                                @click="toggleDislike"
+                            />
                             <span class="text-sm">
                                 {{ props.post.dislikes_count ?? 0 }}
                             </span>

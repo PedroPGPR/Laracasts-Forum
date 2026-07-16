@@ -6,12 +6,39 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Pagination from '@/components/ui/Pagination.vue';
 import type { PostIndexResponse, PostTopic } from '@/types/post';
 import posts from '@/wayfinder/routes/posts';
+import { Input } from '@/components/ui/input';
+import { ref } from 'vue';
+import PostController from '@/actions/App/Http/Controllers/PostController';
+import { watchDebounced } from '@vueuse/core';
 
 const props = defineProps<{
     postsData: PostIndexResponse;
     topics: PostTopic[];
     selectedTopic?: PostTopic;
 }>();
+
+const search = ref('');
+
+watchDebounced(
+    search,
+    (value) => {
+        router.get(
+            PostController.index(),
+            {
+                query: value,
+            },
+            {
+                preserveState: true,
+                preserveScroll: true,
+                replace: true,
+                only: ['postsData'],
+            },
+        );
+    },
+    {
+        debounce: 650,
+    },
+);
 </script>
 
 <template>
@@ -29,9 +56,19 @@ const props = defineProps<{
             <p v-else class="text-center text-muted-foreground">
                 {{ props.selectedTopic?.description }}
             </p>
+            <!-- Search input -->
+            <div class="mx-auto w-1/2">
+                <Input
+                    v-model="search"
+                    type="text"
+                    name="search"
+                    id="search"
+                    placeholder="Search posts..."
+                />
+            </div>
         </div>
 
-        <div class="flex flex-col-reverse md:flex-row justify-between gap-3">
+        <div class="flex flex-col-reverse justify-between gap-3 md:flex-row">
             <div
                 v-if="props.postsData.data.length"
                 class="flex w-full flex-col gap-4"
@@ -65,14 +102,16 @@ const props = defineProps<{
                 </Card>
             </div>
 
-            <Card v-else class="border-dashed">
+            <Card v-else class="w-full border-dashed">
                 <CardContent class="py-8 text-center text-muted-foreground">
-                    Ainda nao existem posts para mostrar.
+                    No posts to show.
                 </CardContent>
             </Card>
 
             <div class="w-full md:w-1/4">
-                <menu class="flex flex-wrap justify-center md:justify-start gap-2 sticky top-5">
+                <menu
+                    class="sticky top-5 flex flex-wrap justify-center gap-2 md:justify-start"
+                >
                     <li>
                         <Badge
                             variant="default"

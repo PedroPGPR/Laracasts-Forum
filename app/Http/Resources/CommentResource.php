@@ -20,8 +20,12 @@ class CommentResource extends JsonResource
             'id' => $this->id,
             'body' => $this->body,
             'html' => $this->html,
+
             'likes_count' => Number::abbreviate($this->likes_count),
             'dislikes_count' => Number::abbreviate($this->dislikes_count),
+            'isLiked' => $request->user()?->hasLiked($this->resource) ?? false,
+            'isDisliked' => $request->user()?->hasDisliked($this->resource) ?? false,
+
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,
 

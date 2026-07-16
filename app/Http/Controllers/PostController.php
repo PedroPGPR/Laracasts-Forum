@@ -9,6 +9,7 @@ use App\Http\Resources\PostResource;
 use App\Http\Resources\TopicResource;
 use App\Models\Post;
 use App\Models\Topic;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -18,12 +19,15 @@ class PostController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(?Topic $topic = null)
+    public function index(Request $request, ?Topic $topic = null)
     {
         $this->authorize('view-any', Post::class);
 
         $posts = Post::with(['user', 'topic'])
             ->when($topic, fn ($query) => $query->where('topic_id', $topic->id))
+            ->when(
+                $request->query('query'),
+                fn (Builder $query) => $query->whereAny(['title', 'body'], 'like', "%{$request->query('query')}%"))
             ->latest()
             ->latest('id')
             ->paginate(15);
@@ -73,8 +77,6 @@ class PostController extends Controller
         return Inertia::render('posts/Show', [
             'post' => PostResource::make($post),
             'comments' => CommentResource::collection($comments),
-            'isLiked' => $request->user()?->hasLiked($post) ?? false,
-            'isDisliked' => $request->user()?->hasDisliked($post) ?? false,
         ]);
     }
 
