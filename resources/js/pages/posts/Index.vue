@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { router } from '@inertiajs/vue3';
+import { router, usePage } from '@inertiajs/vue3';
 import moment from 'moment/moment';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,7 +8,6 @@ import type { PostIndexResponse, PostTopic } from '@/types/post';
 import posts from '@/wayfinder/routes/posts';
 import { Input } from '@/components/ui/input';
 import { ref } from 'vue';
-import PostController from '@/actions/App/Http/Controllers/PostController';
 import { watchDebounced } from '@vueuse/core';
 
 const props = defineProps<{
@@ -19,12 +18,15 @@ const props = defineProps<{
 
 const search = ref('');
 
+const page = usePage();
+
 watchDebounced(
     search,
     (value) => {
         router.get(
-            PostController.index(),
+            page.url,
             {
+                page: 1,
                 query: value,
             },
             {
@@ -116,7 +118,15 @@ watchDebounced(
                         <Badge
                             variant="default"
                             class="hover:cursor-pointer hover:opacity-80"
-                            @click="router.visit(posts.index())"
+                            @click="
+                                router.visit(posts.index(), {
+                                    data: {
+                                        query: search,
+                                    },
+                                    preserveState: true,
+                                    preserveScroll: true,
+                                })
+                            "
                         >
                             All
                         </Badge>
@@ -126,7 +136,13 @@ watchDebounced(
                             variant="default"
                             class="hover:cursor-pointer hover:opacity-80"
                             @click="
-                                router.visit(posts.index({ topic: topic.slug }))
+                                router.visit(posts.index({ topic: topic.slug }), {
+                                    data: {
+                                        query: search,
+                                    },
+                                    preserveState: true,
+                                    preserveScroll: true,
+                                })
                             "
                         >
                             {{ topic.name }}

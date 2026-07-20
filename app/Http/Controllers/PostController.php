@@ -30,7 +30,8 @@ class PostController extends Controller
                 fn (Builder $query) => $query->whereAny(['title', 'body'], 'like', "%{$request->query('query')}%"))
             ->latest()
             ->latest('id')
-            ->paginate(15);
+            ->paginate(15)
+            ->withQueryString();
 
         return Inertia::render('posts/Index', [
             'postsData' => PostResource::collection($posts),
