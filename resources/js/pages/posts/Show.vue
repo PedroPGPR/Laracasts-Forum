@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, Link, router, useForm } from '@inertiajs/vue3';
+import { Head, router, useForm } from '@inertiajs/vue3';
 import { ThumbsUp, ThumbsDown } from 'lucide-vue-next';
 import moment from 'moment';
 import { computed, ref } from 'vue';

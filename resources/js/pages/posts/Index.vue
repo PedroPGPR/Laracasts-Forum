@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { router, usePage } from '@inertiajs/vue3';
+import { watchDebounced } from '@vueuse/core';
 import moment from 'moment/moment';
+import { ref } from 'vue';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import Pagination from '@/components/ui/Pagination.vue';
 import type { PostIndexResponse, PostTopic } from '@/types/post';
 import posts from '@/wayfinder/routes/posts';
-import { Input } from '@/components/ui/input';
-import { ref } from 'vue';
-import { watchDebounced } from '@vueuse/core';
 
 const props = defineProps<{
     postsData: PostIndexResponse;

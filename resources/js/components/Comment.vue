@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { ThumbsDown, ThumbsUp } from 'lucide-vue-next';
 import moment from 'moment';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ThumbsDown, ThumbsUp } from 'lucide-vue-next';
 import { useReaction } from '@/composables/useReaction';
 
 const props = defineProps({
